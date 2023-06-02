@@ -136,6 +136,7 @@ const AppStateProvider = ({ children }) => {
     },
   ]);
   const [orders, setOrders] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   // [{id, quantity: 1}]
   const addToOrder = useCallback((id) => {
@@ -175,6 +176,8 @@ const AppStateProvider = ({ children }) => {
         addToOrder,
         remove,
         removeAll,
+        totalAmount,
+        setTotalAmount,
       }}
     >
       {children}

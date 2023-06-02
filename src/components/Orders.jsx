@@ -2,20 +2,25 @@ import { useMemo } from "react";
 import useActions from "../hooks/useActions";
 import useOrders from "../hooks/useOrders";
 import usePrototypes from "../hooks/usePrototypes";
+import {Link} from "react-router-dom";
+import useTotalAmount from "../hooks/useTotalAmount";
 
 export default function Orders() {
   const orders = useOrders();
   const prototypes = usePrototypes();
+  const { setTotalAmount } = useTotalAmount();
   const { remove, removeAll } = useActions();
 
   const totalPrice = useMemo(() => {
-    return orders
-      .map((order) => {
-        const { id, quantity } = order;
-        const prototype = prototypes.find((p) => p.id === id);
-        return prototype.price * quantity;
-      })
-      .reduce((l, r) => l + r, 0);
+    const total = orders
+        .map((order) => {
+          const { id, quantity } = order;
+          const prototype = prototypes.find((p) => p.id === id);
+          return prototype.price * quantity;
+        })
+        .reduce((l, r) => l + r, 0);
+    setTotalAmount(total);
+    return total;
   }, [orders, prototypes]);
 
   if (orders.length === 0) {
@@ -70,12 +75,12 @@ export default function Orders() {
               <i className="icon icon--delete" />
             </button>
           </div>
-          <button
+          <Link to= '/checkout'><button
             className="btn btn--secondary"
             style={{ width: "100%", marginTop: 10 }}
           >
             Checkout
-          </button>
+          </button></Link>
         </div>
       </div>
     </aside>
